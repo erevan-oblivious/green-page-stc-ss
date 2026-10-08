@@ -1,0 +1,122 @@
+---
+import '../styles/global.css'; // Ensure import filename matches global_2.css
+import WhatsAppButton from '../components/WhatsAppFloat.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
+const { 
+  title = "Website Title", 
+  description = "Website Description",
+  image = "/favicon.ico"
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url.origin);
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="canonical" href={canonicalURL} />
+    
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+</head>
+
+<body>
+    
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header class="header">
+  <div class="header-inner">
+      <a href="/" class="logo-link">
+        <img src="/favicon.svg" alt="" class="header-logo" width="32" height="32"/>
+        <span class="logo-title">Website Title</span>
+      </a>
+  
+    <!-- Hamburger Toggle Button -->
+    <button 
+      class="hamburger" 
+      id="hamburger-btn" 
+      aria-label="Toggle navigation menu" 
+      aria-expanded="false" 
+      aria-controls="nav-menu"
+    >
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+
+    <nav class="nav-links" id="nav-menu">
+      <a href="/">Home</a>
+      <a href="/services">Services</a>
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
+    </nav>
+
+    <script>
+      const hamburgerBtn = document.getElementById('hamburger-btn');
+      const navMenu = document.getElementById('nav-menu');
+
+      if (hamburgerBtn && navMenu) {
+        const toggleMenu = (open?: boolean) => {
+          const state = open ?? !navMenu.classList.contains('is-active');
+          navMenu.classList.toggle('is-active', state);
+          hamburgerBtn.classList.toggle('is-active', state);
+          hamburgerBtn.setAttribute('aria-expanded', state.toString());
+        };
+
+        hamburgerBtn.addEventListener('click', () => toggleMenu());
+
+        // Close menu on Escape key press
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && navMenu.classList.contains('is-active')) {
+            toggleMenu(false);
+            hamburgerBtn.focus();
+          }
+        });
+      }
+    </script>
+
+    </div>
+  </header>
+
+<main class="main" id="main-content">
+
+  <slot />
+
+</main>
+
+<footer class="footer">
+  <hr class="divider-full" />
+  
+  <p>Business name, company registration number, charity registration number</p>
+  <p>&copy; {new Date().getFullYear()} Business Name. All rights reserved.</p>
+
+  <nav class="footer-nav" aria-label="Legal navigation">
+    <a href="/privacy">Privacy Policy</a>
+    <a href="/cookies">Cookie Policy</a>
+    <a href="/accessibility">Accessibility Statement</a>
+  </nav>
+
+  <WhatsAppButton phoneNumber="+1234567890" message="Hello! I would like to get in touch." />
+
+</footer>
+
+</body>
+
+</html>

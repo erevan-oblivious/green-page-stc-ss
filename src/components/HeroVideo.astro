@@ -1,0 +1,136 @@
+---
+interface Props {
+  title?: string;
+  subtitle?: string;
+  videoWebm?: string;
+  videoMp4?: string;
+  poster?: string;
+  
+  primaryButtonText?: string;
+  primaryButtonLink?: string;
+  secondaryButtonText?: string;
+  secondaryButtonLink?: string;
+
+  minHeight?: string;
+}
+
+const {
+  title = "Headline Text Goes Here",
+  subtitle = "Supporting descriptive copy designed for maximum visual legibility over video.",
+  videoWebm,
+  videoMp4,
+  poster = "",
+  primaryButtonText = "Primary Action",
+  primaryButtonLink,
+  secondaryButtonText,
+  secondaryButtonLink,
+  minHeight = "80vh",
+} = Astro.props;
+
+const posterStyle = poster ? `url('${poster}')` : "none";
+---
+
+<section 
+  class="hero-banner" 
+  style={`--poster-url: ${posterStyle}; --hero-min-height: ${minHeight};`}
+>
+  {(videoWebm || videoMp4) && (
+    <video
+      autoplay
+      loop
+      muted
+      playsinline
+      preload="metadata"
+      poster={poster}
+      class="hero-video"
+      aria-hidden="true"
+      tabindex="-1"
+    >
+      {videoWebm && <source src={videoWebm} type="video/webm" />}
+      {videoMp4 && <source src={videoMp4} type="video/mp4" />}
+    </video>
+  )}
+
+  <div class="hero-overlay" aria-hidden="true"></div>
+
+  <div class="hero-content">
+    <h1 class="hero-title">{title}</h1>
+    {subtitle && <p class="hero-subtitle">{subtitle}</p>}
+    
+    {(primaryButtonLink || secondaryButtonLink) && (
+      <div class="hero-actions">
+        {primaryButtonLink && (
+          <a href={primaryButtonLink} class="btn btn-primary">{primaryButtonText}</a>
+        )}
+        {secondaryButtonLink && (
+          <a href={secondaryButtonLink} class="btn btn-secondary">{secondaryButtonText}</a>
+        )}
+      </div>
+    )}
+  </div>
+</section>
+
+<style>
+.hero-banner {
+  position: relative;
+  min-height: var(--hero-min-height, 80vh);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: var(--background);
+  background-image: var(--poster-url);
+  background-size: cover;
+  background-position: center;
+}
+
+.hero-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: color-mix(in srgb, var(--background) 65%, transparent);
+  z-index: 2;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: var(--max-width-wide);
+  padding: 4rem 1.5rem;
+  color: var(--text-primary);
+  text-align: center;
+}
+
+.hero-title {
+  font-size: clamp(2.25rem, 5vw, 3.75rem);
+  line-height: 1.1;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.hero-subtitle {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  max-width: 45rem;
+  margin: 0 auto 2rem;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+</style>
