@@ -1,0 +1,399 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Get in Touch | Request an Estimate",
+  description = "Please fill out the form below with your project or enquiry details and our team will get back to you shortly.",
+} = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+
+<section class="form-section" id="contact-form">
+  <div class="form-container">
+    
+    <div class="section-header">
+      <span class="section-eyebrow">Online Enquiry</span>
+      <h2 class="section-title">Send Us a Message</h2>
+      <p class="section-description">{description}</p>
+    </div>
+
+    <!-- Updated action to point to /api/form -->
+    <form class="template-form" action="/api/form" method="POST">
+      
+      <!-- Anti-Spam Honeypot Field (Hidden) -->
+      <input type="text" name="botcheck" style="display: none;" tabindex="-1" autocomplete="off" />
+
+      <!-- SECTION 1: PRIMARY CONTACT INFORMATION -->
+      <fieldset class="form-fieldset">
+        <legend class="fieldset-title">Contact Information</legend>
+        
+        <div class="form-row two-col">
+          <div class="form-group">
+            <label for="first-name">First Name <span class="required">*</span></label>
+            <input type="text" id="first-name" name="firstName" required autocomplete="given-name" placeholder="e.g. Alex" />
+          </div>
+          <div class="form-group">
+            <label for="last-name">Last Name <span class="required">*</span></label>
+            <input type="text" id="last-name" name="lastName" required autocomplete="family-name" placeholder="e.g. Smith" />
+          </div>
+        </div>
+
+        <div class="form-row two-col">
+          <div class="form-group">
+            <label for="email">Email Address <span class="required">*</span></label>
+            <input type="email" id="email" name="email" required autocomplete="email" placeholder="e.g. alex@example.com" />
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone Number <span class="required">*</span></label>
+            <input type="tel" id="phone" name="phone" required autocomplete="tel" placeholder="e.g. 07123 456789" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="address">Primary Address <span class="required">*</span></label>
+          <input type="text" id="address" name="address" required placeholder="House/Building name or number, street, town, postcode" />
+        </div>
+
+        <!-- CONDITIONAL RADIO TOGGLE -->
+        <div class="form-group radio-toggle-group">
+          <label>Is your service/site location different from this primary address? <span class="required">*</span></label>
+          <div class="radio-options">
+            <label class="radio-card">
+              <input type="radio" name="hasDifferentSite" value="no" checked />
+              <span class="radio-label-text">No — Same as primary address</span>
+            </label>
+            <label class="radio-card">
+              <input type="radio" name="hasDifferentSite" value="yes" />
+              <span class="radio-label-text">Yes — Secondary site / venue location</span>
+            </label>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- SECTION 2: SECONDARY SITE LOCATION (CONDITIONAL) -->
+      <fieldset class="form-fieldset" id="site-details-section" style="display: none;">
+        <legend class="fieldset-title">Secondary Site / Service Location</legend>
+        
+        <div class="form-group">
+          <label for="site-name">Site or Business Name <span class="required">*</span></label>
+          <input type="text" id="site-name" name="siteName" data-site-required placeholder="e.g. Riverside Business Park or Unit 4" />
+        </div>
+
+        <div class="form-row two-col">
+          <div class="form-group">
+            <label for="site-address">Site Address <span class="required">*</span></label>
+            <input type="text" id="site-address" name="siteAddress" data-site-required placeholder="Street address or location details" />
+          </div>
+          <div class="form-group">
+            <label for="site-postcode">Site Postcode <span class="required">*</span></label>
+            <input type="text" id="site-postcode" name="sitePostcode" data-site-required placeholder="e.g. NE1 1AA" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="site-notes">Access or Parking Notes <span class="optional">(Optional)</span></label>
+          <textarea id="site-notes" name="siteNotes" rows="2" placeholder="e.g. Gate codes, delivery instructions, or parking details."></textarea>
+        </div>
+      </fieldset>
+
+      <!-- SECTION 3: ENQUIRY DETAILS -->
+      <fieldset class="form-fieldset">
+        <legend class="fieldset-title">Enquiry Details</legend>
+
+        <div class="form-group">
+          <label for="service-type">Service Required <span class="optional">(Optional)</span></label>
+          <select id="service-type" name="serviceType">
+            <option value="">Select an option...</option>
+            <option value="General Enquiry">General Enquiry</option>
+            <option value="Quote Request">Request an Estimate</option>
+            <option value="Consultation">Book a Consultation</option>
+            <option value="Support">Customer Support</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="message">How can we help? <span class="required">*</span></label>
+          <textarea id="message" name="message" rows="4" required placeholder="Please provide details regarding your request or enquiry..."></textarea>
+        </div>
+      </fieldset>
+
+      <!-- SECTION 4: CONSENT & SUBMIT -->
+      <fieldset class="form-fieldset consent-fieldset">
+        <div class="checkbox-group">
+          <input type="checkbox" id="terms-consent" name="termsConsent" required />
+          <label for="terms-consent">
+            I agree to the privacy policy and consent to being contacted regarding this enquiry. <span class="required">*</span>
+          </label>
+        </div>
+
+        <div class="form-submit">
+          <button type="submit" class="btn btn-primary btn-submit">
+            <span>Submit Form</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </div>
+      </fieldset>
+
+    </form>
+
+  </div>
+</section>
+
+<!-- CLIENT-SIDE TOGGLE SCRIPT -->
+<script>
+  function setupFormToggle() {
+    const radioInputs = document.querySelectorAll<HTMLInputElement>('input[name="hasDifferentSite"]');
+    const siteSection = document.getElementById('site-details-section');
+    const siteRequiredInputs = document.querySelectorAll<HTMLInputElement>('[data-site-required]');
+
+    function toggleSiteSection() {
+      if (!siteSection) return;
+
+      const selectedOption = document.querySelector<HTMLInputElement>('input[name="hasDifferentSite"]:checked')?.value;
+      const isDifferentSite = selectedOption === 'yes';
+
+      if (isDifferentSite) {
+        siteSection.style.display = 'block';
+        siteRequiredInputs.forEach(input => input.setAttribute('required', 'true'));
+      } else {
+        siteSection.style.display = 'none';
+        siteRequiredInputs.forEach(input => input.removeAttribute('required'));
+      }
+    }
+
+    radioInputs.forEach(radio => {
+      radio.addEventListener('change', toggleSiteSection);
+    });
+
+    // Initialize state on page load
+    toggleSiteSection();
+  }
+
+  // Run on initial load and handle Astro view transition navigation events
+  setupFormToggle();
+  document.addEventListener('astro:page-load', setupFormToggle);
+</script>
+
+<style>
+  .form-section {
+    padding: 4.5rem 1.5rem;
+    background-color: var(--background);
+  }
+
+  .form-container {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .template-form {
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md, 8px);
+    padding: 2.5rem 2rem;
+  }
+
+  .form-fieldset {
+    border: none;
+    padding: 0;
+    margin: 0 0 2.5rem 0;
+  }
+
+  .form-fieldset:last-of-type {
+    margin-bottom: 0;
+  }
+
+  .fieldset-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
+    width: 100%;
+  }
+
+  /* Radio Card Toggle Styling */
+  .radio-toggle-group {
+    margin-top: 1.5rem;
+    background-color: rgba(0, 0, 0, 0.15);
+    padding: 1.25rem;
+    border-radius: var(--radius-sm, 6px);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .radio-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.875rem;
+    margin-top: 0.5rem;
+  }
+
+  .radio-card {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.75rem 1rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm, 6px);
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .radio-card:hover {
+    border-color: var(--text-secondary);
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .radio-card input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--secondary);
+    margin: 0;
+    cursor: pointer;
+  }
+
+  .radio-label-text {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .form-row {
+    display: grid;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .form-row.two-col {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.25rem;
+  }
+
+  .form-row .form-group {
+    margin-bottom: 0;
+  }
+
+  label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.375rem;
+  }
+
+  .required {
+    color: var(--text-secondary);
+  }
+
+  .optional {
+    font-weight: 400;
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 0.75rem 0.875rem;
+    font-family: inherit;
+    font-size: 0.9375rem;
+    color: var(--text-primary);
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm, 6px);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
+  }
+
+  select option {
+    background-color: var(--background);
+    color: var(--text-primary);
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--secondary);
+    box-shadow: 0 0 0 2px rgba(163, 184, 163, 0.25);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 90px;
+  }
+
+  .consent-fieldset {
+    background-color: rgba(0, 0, 0, 0.15);
+    padding: 1.5rem;
+    border-radius: var(--radius-sm, 6px);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .checkbox-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .checkbox-group input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-top: 0.15rem;
+    accent-color: var(--secondary);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .checkbox-group label {
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--text-primary);
+    cursor: pointer;
+    margin-bottom: 0;
+  }
+
+  .form-submit {
+    margin-top: 1.5rem;
+  }
+
+  .btn-submit {
+    max-width: 100%;
+    cursor: pointer;
+  }
+
+  @media (max-width: 640px) {
+    .form-section {
+      padding: 3rem 1rem;
+    }
+
+    .template-form {
+      padding: 1.5rem 1.25rem;
+    }
+
+    .radio-options,
+    .form-row.two-col {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+</BaseLayout>
