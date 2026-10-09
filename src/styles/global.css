@@ -312,7 +312,6 @@ figcaption {
 .main {
   flex-grow: 1;
   width: 100%;
-  max-width: var(--max-width-wide);
   margin-inline: auto;
   padding: 0;
 }
